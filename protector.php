@@ -3,8 +3,8 @@
 // frequently requests
 define("LOGGER", false);
 define("HOST_DIR", __DIR__);
-define("MAX_REQ", 3);
-define("TIMEOUT_EXPIRE", 200);
+define("MAX_REQ", 5);
+define("TIMEOUT_EXPIRE", 60*10);
 
 
 function ipf($ip){
@@ -42,7 +42,7 @@ return $curTime;
 }
 
 function get_ms_diff($nowTime, $t){
-return $nowTime - $t;
+return ($nowTime - $t);
 }
 
 function get_ip(){
@@ -112,7 +112,7 @@ if (exists_ip( $ip ) ){
 
 
   if (($counter>MAX_REQ) && (!$isStatOld))        {
-	 echo "Временно заблокирован за превышение запросов";
+	 echo "Временно заблокирован за превышение запросов. Доступ откроется через " . strval(floor((TIMEOUT_EXPIRE-$ms_delay)/60))." минут";
 	 save_blacklist($ip);
    save_ip_stat($ip, [$ip,  $counter+1, $time]); 
    
@@ -135,4 +135,3 @@ if (exists_ip( $ip ) ){
 
 main();
 ?>
-
